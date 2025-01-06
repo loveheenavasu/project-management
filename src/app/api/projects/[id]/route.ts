@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProject, updateProject, deleteProject } from "@/lib/mockData";
+import { getProject, updateProject } from "@/lib/mockData";
 
 export async function GET(
   request: Request,
@@ -26,17 +26,4 @@ export async function PUT(
   }
 
   return NextResponse.json(updated);
-}
-
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
-  const deleted = deleteProject(params.id);
-
-  if (!deleted) {
-    return NextResponse.json({ error: "Project not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ message: "Project deleted" });
 }

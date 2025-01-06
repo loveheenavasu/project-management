@@ -1,76 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button, Spin, Table } from "antd";
-
-import { Project } from "@/lib/types";
-import { ColumnsType } from "antd/es/table";
-import { useRouter } from "next/navigation";
+import { Spin, Table } from "antd";
 import { Layout } from "@/components";
+import { useProjectListings } from "@/hooks";
 
 export default function Home() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  const columns: ColumnsType<Project> = [
-    {
-      title: "Project ID",
-      dataIndex: "projectId",
-      key: "projectId",
-    },
-    {
-      title: "Project Name",
-      dataIndex: "projectName",
-      key: "projectName",
-    },
-    {
-      title: "Start Date",
-      dataIndex: "startDate",
-      key: "startDate",
-    },
-    {
-      title: "End Date",
-      dataIndex: "endDate",
-      key: "endDate",
-    },
-    {
-      title: "Project Manager",
-      dataIndex: "projectManager",
-      key: "projectManager",
-    },
-    {
-      title: "",
-      key: "action",
-      render: (ele: Project) => (
-        <Button
-          onClick={() => {
-            router.push(`/projects/${ele.projectId}`);
-          }}
-          type="primary"
-          className="bg-blue-500"
-        >
-          Edit
-        </Button>
-      ),
-    },
-  ];
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch("/api/projects");
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  const { loading, columns, projects } = useProjectListings();
 
   return (
     <Layout>

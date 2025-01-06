@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Management App
 
-## Getting Started
+A modern project management application built with Next.js 15, TypeScript, Ant Design, and Tailwind CSS.
 
-First, run the development server:
+## 📁 Project Structure
 
+```
+├── src/                      # Source code
+│   ├── app/                  # Next.js app directory (pages & API routes)
+│   ├── components/           # Reusable React components
+│   ├── hooks/                # Custom React hooks
+│   ├── lib/                  # Utility functions and types
+│   ├── fixtures/             # Test data and mock fixtures
+│   └── icons/                # Custom icon components
+├── public/                   # Static assets
+└── __tests__/                # Test files
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm, yarn, or pnpm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/loveheenavasu/project-management
+cd project-management-app
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔧 Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Starts the development server
+- `npm run build` - Creates a production build
+- `npm run start` - Runs the production server
+- `npm run test` - Runs the test suite
+- `npm run lint` - Runs ESLint to check code quality
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js 14](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Ant Design](https://ant.design/) - UI Framework
+- [Jest](https://jestjs.io/) - Testing framework
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧪 Testing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project includes a test suite using Jest. Test files are located in the `__tests__` directory and alongside the components they test.
 
-## Deploy on Vercel
+To run tests:
+```bash
+npm run test
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Development Guidelines
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The `src/app` directory contains all pages and API routes following Next.js 14 app directory structure
+- Reusable components should be placed in `src/components`
+- Custom hooks should be placed in `src/hooks`
+- Types and utilities should be placed in `src/lib`
+- Add new icons to `src/icons`
+
+## 🔄 API Routes
+
+The application includes API routes for project management:
+
+- `GET /api/projects` - List all projects
+- `GET /api/projects/[id]` - Get a specific project
+- Additional routes as needed
