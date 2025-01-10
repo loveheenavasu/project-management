@@ -1,42 +1,35 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { message } from "antd";
 import { Form } from "antd";
 import dayjs from "dayjs";
-import { Project, ProjectUpdateInput } from "@/lib/types";
+import { ProjectUpdateInput } from "@/lib/types";
+import { useProjects } from "./useProjects";
 
 export const useManageProject = (id: string) => {
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [form] = Form.useForm();
 
+  const { projects, loading } = useProjects();
+
+  const project = projects.find((ele) => ele.projectId === id);
+
   useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const response = await fetch(`/api/projects/${id}`);
-        const data = await response.json();
-        setProject(data);
+    const setFormData = async () => {
+      if (project) {
         form.setFieldsValue({
-          projectName: data.projectName,
-          projectDescription: data.projectDescription,
-          startDate: data.startDate ? dayjs(data.startDate) : null,
-          endDate: data.endDate ? dayjs(data.endDate) : null,
-          projectManager: data.projectManager,
-          isFavorite: data?.isFavorite,
+          projectName: project.projectName,
+          projectDescription: project.projectDescription,
+          startDate: project.startDate ? dayjs(project.startDate) : null,
+          endDate: project.endDate ? dayjs(project.endDate) : null,
+          projectManager: project.projectManager,
+          isFavorite: project?.isFavorite,
         });
-      } catch (error) {
-        message.error(
-          (error as { message: string }).message ||
-            "Failed to fetch project details",
-        );
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchProject();
-  }, [id, form]);
+    setFormData();
+  }, [project, form]);
 
   const onFinish = async (values: ProjectUpdateInput) => {
     try {

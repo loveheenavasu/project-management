@@ -1,46 +1,29 @@
+import { useProjects } from "@/hooks";
 import { FavoriteIcon } from "@/icons";
-import { Project } from "@/lib/types";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/projects");
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProjects();
-  }, []);
-
-  const favoriteProjects = useMemo(
-    () => projects.filter((project) => project.isFavorite),
-    [projects],
-  );
+  const { loading, favoriteProjects } = useProjects();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+  const hasNoFavoriteProject = useMemo(
+    () => favoriteProjects.length < 1,
+    [favoriteProjects.length],
+  );
 
   const FavoritesList = () => (
     <>
       <h2 className="text-lg font-medium mb-4">Favorite Projects</h2>
       {!loading &&
-        favoriteProjects.length < 1 &&
+        hasNoFavoriteProject &&
         "You have not added any project to favorites."}
       <ul className="list-disc pl-5">
-        {loading
+        {loading && hasNoFavoriteProject
           ? Array.from({ length: 2 }).map((_, index) => (
               <li key={index} className="text-gray-400 animate-pulse mb-2">
                 <div className="w-3/4 h-5 bg-gray-200 rounded"></div>

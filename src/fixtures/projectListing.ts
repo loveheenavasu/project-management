@@ -1,10 +1,5 @@
 export const TABLE_COLUMNS = [
   {
-    title: "Project ID",
-    dataIndex: "projectId",
-    key: "projectId",
-  },
-  {
     title: "Project Name",
     dataIndex: "projectName",
     key: "projectName",

@@ -59,10 +59,9 @@ export const updateProject = (
   return null;
 };
 
-export const addProject = (project: Omit<Project, "projectId">) => {
+export const addProject = (project: Project) => {
   const newProject: Project = {
     ...project,
-    projectId: Date.now().toString(),
   };
   projects.push(newProject);
   return newProject;

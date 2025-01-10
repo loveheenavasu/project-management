@@ -1,10 +1,11 @@
 "use client";
 import { use } from "react";
-
-import { Form, Input, Button, Spin, DatePicker, Switch } from "antd";
-
-import { Layout } from "@/components";
+import { Button, Spin, Typography } from "antd";
 import { useManageProject } from "@/hooks";
+import { useRouter } from "next/navigation";
+import { BookmarkIcon } from "@/icons";
+
+const { Text } = Typography;
 
 export default function ProjectDetail({
   params,
@@ -12,103 +13,75 @@ export default function ProjectDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { project, loading, form, onFinish } = useManageProject(id);
+  const { project, loading } = useManageProject(id);
+  const router = useRouter();
 
   if (loading) {
     return (
-      <Layout>
-        <Spin />
-      </Layout>
+      <div className="flex justify-center items-center h-screen">
+        <Spin size="large" />
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="bg-white min-h-screen flex">
-        <div className="flex-1 bg-white min-h-screen">
-          <h1 className="text-2xl text-black font-semibold mb-6">
-            Project Detail Page
-          </h1>
-          <Form form={form} layout="vertical" onFinish={onFinish}>
-            <p className="mb-6 flex gap-2 items-center">
-              Project ID:{" "}
-              <span className="font-bold">{project?.projectId}</span>
-            </p>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Form.Item
-                name="projectName"
-                label="Project Name"
-                rules={[
-                  { required: true, message: "Project name is required" },
-                ]}
-              >
-                <Input placeholder="Enter project name" />
-              </Form.Item>
-              <Form.Item
-                name="projectManager"
-                label="Project Manager"
-                rules={[
-                  {
-                    required: true,
-                    message: "Project manager name is required",
-                  },
-                ]}
-              >
-                <Input placeholder="Enter project manager name" />
-              </Form.Item>
-            </div>
-
-            <Form.Item name="projectDescription" label="Description">
-              <Input.TextArea
-                rows={4}
-                placeholder="Enter project description"
-              />
-            </Form.Item>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Form.Item
-                name="startDate"
-                label="Start Date"
-                rules={[{ required: true, message: "Start date is required" }]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-              <Form.Item
-                name="endDate"
-                label="End Date"
-                rules={[
-                  { required: true, message: "End date is required" },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || value.isAfter(getFieldValue("startDate"))) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error("End date must be after start date"),
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </div>
-
-            <Form.Item
-              label="Mark as Favorite?"
-              name="isFavorite"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-
-            <Button type="primary" htmlType="submit" className="bg-blue-500">
-              Update
-            </Button>
-          </Form>
-        </div>
+    <div className="max-w-4xl">
+      <div className="flex w-full min-w-full justify-between">
+        <h1 className="text-2xl text-black font-semibold mb-12">
+          Project Detail Page
+        </h1>
+        {project?.isFavorite && (
+          <BookmarkIcon color="#FF5B61" stroke="#FF5B61" />
+        )}
       </div>
-    </Layout>
+
+      <div className="grid grid-cols-2 gap-x-16 gap-y-6  items-center w-fit">
+        <Text className="justify-self-end">Project ID</Text>
+        <div className="flex w-full min-w-full justify-between">
+          <Text>{project?.projectId}</Text>
+        </div>
+
+        <Text className="justify-self-end">Project Name</Text>
+        <Text>{project?.projectName}</Text>
+
+        <Text className="justify-self-end">Description</Text>
+        <Text className="max-w-xl">{project?.projectDescription ?? "-"}</Text>
+
+        <Text className="justify-self-end">Start Date</Text>
+        <Text>{project?.startDate}</Text>
+
+        <Text className="justify-self-end">End Date</Text>
+        <Text>{project?.endDate}</Text>
+
+        <Text className="justify-self-end">Project Manager</Text>
+        <Text>{project?.projectManager}</Text>
+      </div>
+
+      <div className="flex gap-16 mt-16">
+        <Button
+          type="primary"
+          size="large"
+          style={{
+            paddingInline: "2rem",
+          }}
+          onClick={() => router.back()}
+          className="bg-blue-500"
+        >
+          Back
+        </Button>
+
+        <Button
+          type="primary"
+          style={{
+            paddingInline: "2rem",
+          }}
+          size="large"
+          onClick={() => router.push(`/projects/${project?.projectId}/edit`)}
+          className="bg-blue-500"
+        >
+          Edit
+        </Button>
+      </div>
+    </div>
   );
 }
